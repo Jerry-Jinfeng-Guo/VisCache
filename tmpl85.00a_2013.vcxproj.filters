@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="game.cpp" />
+    <ClCompile Include="surface.cpp">
+      <Filter>template code</Filter>
+    </ClCompile>
+    <ClCompile Include="threads.cpp">
+      <Filter>template code</Filter>
+    </ClCompile>
+    <ClCompile Include="template.cpp">
+      <Filter>template code</Filter>
+    </ClCompile>
+    <ClCompile Include="counters.cpp">
+      <Filter>template code</Filter>
+    </ClCompile>
+    <ClCompile Include="Point2D.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Point3D.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Vector3D.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Normal.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoPrimitive.cpp">
+      <Filter>primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangle.cpp">
+      <Filter>primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>shading</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>shading</Filter>
+    </ClCompile>
+    <ClCompile Include="HitPoint.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Tracer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="Rect.cpp">
+      <Filter>primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="BVH.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="EnvBall.cpp">
+      <Filter>shading</Filter>
+    </ClCompile>
+    <ClCompile Include="RGBColor.cpp">
+      <Filter>shading</Filter>
+    </ClCompile>
+    <ClCompile Include="Sampler.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>shading</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageProcessing.cpp">
+      <Filter>utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="VisCache.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="game.h" />
+    <ClInclude Include="surface.h">
+      <Filter>template code</Filter>
+    </ClInclude>
+    <ClInclude Include="threads.h">
+      <Filter>template code</Filter>
+    </ClInclude>
+    <ClInclude Include="template.h">
+      <Filter>template code</Filter>
+    </ClInclude>
+    <ClInclude Include="precomp.h" />
+    <ClInclude Include="counters.h">
+      <Filter>template code</Filter>
+    </ClInclude>
+    <ClInclude Include="Point2D.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Point3D.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3D.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Normal.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoPrimitive.h">
+      <Filter>primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>shading</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>shading</Filter>
+    </ClInclude>
+    <ClInclude Include="HitPoint.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Tracer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.h">
+      <Filter>primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="BVH.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="tiny_obj_loader.h">
+      <Filter>thirdParty</Filter>
+    </ClInclude>
+    <ClInclude Include="EnvBall.h">
+      <Filter>shading</Filter>
+    </ClInclude>
+    <ClInclude Include="RGBColor.h">
+      <Filter>shading</Filter>
+    </ClInclude>
+    <ClInclude Include="Sampler.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>shading</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageProcessing.h">
+      <Filter>utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="VisCache.h">
+      <Filter>core</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="template code">
+      <UniqueIdentifier>{bf32dd6e-4be7-4889-8ac6-49e7ee163c40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utilities">
+      <UniqueIdentifier>{c29f5dc6-9c26-40ad-93b6-41de4f3a642e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="primitives">
+      <UniqueIdentifier>{554b71ce-fe26-43e5-81c5-311f745c9850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shading">
+      <UniqueIdentifier>{fd01d40e-b04a-43fc-9076-0db9435cce54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="core">
+      <UniqueIdentifier>{481a875e-8696-4cbb-ba05-9401802de519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thirdParty">
+      <UniqueIdentifier>{25e566cd-d9c1-46ae-93e4-daeb39683440}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="_readme.txt">
+      <Filter>template code</Filter>
+    </Text>
+  </ItemGroup>
+</Project>
