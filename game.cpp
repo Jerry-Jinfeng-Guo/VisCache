@@ -387,7 +387,7 @@ void Game::BuildScene()
 	Lambert* lambert_test = new Lambert(RGBColor(0.5f));		lambert_test->set_texture(solid_red);		scene->add_material(lambert_test);
 	Lambert* lambert_test_r = new Lambert(RGBColor(0.5f));		lambert_test_r->set_texture(solid_red);		scene->add_material(lambert_test_r);
 	Lambert* lambert_test_grd = new Lambert(RGBColor(0.5f));	lambert_test_grd->set_texture(checkerBoard);	scene->add_material(lambert_test_grd);
-	Lambert* light_W_test = new Lambert(RGBColor(0.0f), RGBColor(50.0f)); light_W_test->set_texture(solid_blk); scene->add_material(light_W_test);
+	Lambert* light_W_test = new Lambert(RGBColor(1.0f), RGBColor(10.0f)); light_W_test->set_texture(solid_red); scene->add_material(light_W_test);
 	Lambert* light_R_test = new Lambert(RGBColor(0.0f), RGBColor(20.0f, 0.0f, 0.0f)); light_R_test->set_texture(solid_blk); scene->add_material(light_R_test);
 	Matte* matte_test = new Matte(RGBColor(1.0f, 0.0f, 0.0f));	matte_test->set_texture(solid_grn);			scene->add_material(matte_test);
 	Mirror* mirror_test = new Mirror(RGBColor(0.8f));			mirror_test->set_texture(solid_wit);		scene->add_material(mirror_test);
@@ -425,7 +425,7 @@ void Game::BuildScene()
 	
 	// The light(s)!
 #ifdef BIG_LIGHT
-	Rect* areaLight01 = new Rect(Point3D(50.0f, 40.0f, 15.0f), Point3D( 0.0f, 40.1f, 15.0f), Point3D(50.0f, 39.9f, 0.0f));
+	Rect* areaLight01 = new Rect(Point3D(30.0f, 40.0f, 15.0f), Point3D( 0.0f, 40.1f, 15.0f), Point3D(30.0f, 39.9f, 0.0f));
 #else
 	Rect* areaLight01 = new Rect(Point3D(50.0f, 40.0f, 15.0f), Point3D(30.0f, 40.1f, 15.0f), Point3D(50.0f, 39.9f, 5.0f));
 #endif

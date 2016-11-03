@@ -14,15 +14,15 @@ public:
 	// Defult Constructor
 	Normal();
 	// Construct from one value
-	Normal(const float value);
+	inline Normal(const float value);
 	// Construct from three values
-	Normal(const float x_value, const float y_value, const float z_value);
+	inline Normal(const float x_value, const float y_value, const float z_value);
 	// Copy Constructor, from a Normal
 	Normal(const Normal& nrml);
 	// Copy Constructor, from a Vector3D
 	Normal(const Vector3D& vec3);
 	// Destructor
-	~Normal();
+	inline ~Normal();
 
 	// Assignment Operator, from a Normal
 	Normal& operator=(const Normal& nrml);

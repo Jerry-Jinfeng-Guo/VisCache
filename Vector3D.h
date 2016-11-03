@@ -11,19 +11,19 @@ public:
 public:
 	// Constructors
 	// Defult Constructor
-	Vector3D();
+	inline Vector3D();
 	// Construct with one float
-	Vector3D(float value);
+	inline Vector3D(float value);
 	// Construct with three floats
-	Vector3D(float x_value, float y_value, float z_value);
+	inline Vector3D(float x_value, float y_value, float z_value);
 	// Copy Construct from a vector
-	Vector3D(const Vector3D& vec3);
+	inline Vector3D(const Vector3D& vec3);
 	// Construct from a Point3D
-	Vector3D(const Point3D& p3d);
+	inline Vector3D(const Point3D& p3d);
 	// Construct from a normal
 	Vector3D(const Normal& nrml);
 	// Destructor
-	~Vector3D();
+	inline ~Vector3D();
 
 	// Assignment operator, from a Vector3D
 	Vector3D& operator=(const Vector3D& vec3);
@@ -54,7 +54,7 @@ public:
 	Vector3D operator^ (const Vector3D& vec3) const;
 	// Normalize the Vector3D to a unit Vector3D
 	// I used SIMD here, but was slower and introduce error: _mm_rsqrt_ss
-	inline void normalize() { float vecLengthInv = 1.0f / sqrtf(x*x+y*y+z*z); x *= vecLengthInv; y *= vecLengthInv; z *= vecLengthInv; }
+	inline void normalize() { float vecLengthInv = 1.0f / sqrtf(x*x + y*y + z*z); x *= vecLengthInv; y *= vecLengthInv; z *= vecLengthInv; }
 	// Return a unit Vector3D, and normalize the Vector3D
 	Vector3D& hat();
 };

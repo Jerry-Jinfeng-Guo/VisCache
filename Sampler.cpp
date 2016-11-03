@@ -97,32 +97,38 @@ void Sampler::shade(Ray& ray_process, HitPoint& hitPoint, RGBColor& color, const
 		Vector3D lightSampleDir = samplePoint - hitPoint.point;
 		float distance2 = lightSampleDir.len_squared();
 		lightSampleDir.normalize();
+		
+		if (lightSampleDir * lights[lucky_light]->get_normal(samplePoint) <= 0.0f)
+		{
+			float area = lights[lucky_light]->get_area();
+			sampleRay_light = Ray(hitPoint.point + EPSILON * lightSampleDir, lightSampleDir);
+			sampleRay_light.t = sqrtf(distance2) - 0.0005f;
 
-		float area = lights[lucky_light]->get_area();
-		float cosine_light = -1.0f*lightSampleDir*lights[lucky_light]->get_normal(samplePoint);
-		sampleRay_light = Ray(hitPoint.point + EPSILON * lightSampleDir, lightSampleDir);
-		sampleRay_light.t = sqrtf(distance2) - 0.0005f;
+			// Visibility test
+			bool visible = isVisible(sampleRay_light, hitPoint.normal);
 
-		// Visibility test
-		bool visible = isVisible(sampleRay_light, hitPoint.normal);
-
-		pdf_light = distance2 / (area * cosine_light);	// pdf_light = 1 / area;
-		contrib_light = hitPoint.material->BRDF(ray_process, hitPoint, sampleRay_light) *
-						lights[lucky_light]->get_material()->get_emission()	* 
-						visible / pdf_light;
+			//pdf_light = distance2 / (area * cosine_light);
+			pdf_light = distance2 / area; float inv_pdf_light = area / distance2;
+			contrib_light = hitPoint.material->BRDF(ray_process, hitPoint, sampleRay_light) *
+							lights[lucky_light]->get_material()->get_emission()	*
+							visible * inv_pdf_light;
+		}
 	}
 	
 	/// Multiple Importance Sampling
 	if (!contrib_light.is_black())
 	{
-		//// Power heuristic, not necessarily better
-		//weight_scatter = PowerHeuristic(1, pdf_scatter, 1, pdf_light);
-		//weight_light = PowerHeuristic(1, pdf_light, 1, pdf_scatter);
+#if 0
+		// Power heuristic, not necessarily better
+		weight_scatter = PowerHeuristic(1, pdf_scatter, 1, pdf_light);
+		weight_light = PowerHeuristic(1, pdf_light, 1, pdf_scatter);
+#else
 		// Balance heuristic
 		weight_scatter = BalanceHeuristic(1, pdf_scatter, 1, pdf_light);
 		weight_light   = BalanceHeuristic(1, pdf_light, 1, pdf_scatter);
+#endif
+		E += weight_light * contrib_light * albedo;
 	}
-	E += weight_light * contrib_light * albedo;
 #endif
 	// For Russian Roulette. Here max color channel is used as probablity, and will be scaled up
 	float maxMatColor = albedo.max_channel();

@@ -31,7 +31,7 @@
 #define drand48()			(float)rand()/RAND_MAX
 #define NEE												// Next event estimation
 //#define VIS_CACHE										// The Visibility Caching switch
-//#define BIG_LIGHT
+#define BIG_LIGHT
 #define INDOOR
 #define USE_CACHE_SINCE		0							// Start using the cache since which depth of rays
 #define	NUM_VIS_CACHE		1024						// 2k -> ~32mb		4k	-> ~64 mb	10k		-> ~160 mb

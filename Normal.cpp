@@ -3,15 +3,16 @@
 #include "Normal.h"
 
 // Defult Constructor
-Normal::Normal() : x(0.0f), y(0.0f), z(0.0f)
+Normal::Normal()
 {
+	x = 0.0f; y = 0.0f; z = 0.0f;
 }
 // Construct from one value
-Normal::Normal(const float value) : x(value), y(value), z(value)
+inline Normal::Normal(const float value) : x(value), y(value), z(value)
 {
 }
 // Construct from three values
-Normal::Normal(const float x_value, const float y_value, const float z_value)
+inline Normal::Normal(const float x_value, const float y_value, const float z_value)
 : x(x_value), y(y_value), z(z_value)
 {
 }
@@ -26,7 +27,7 @@ Normal::Normal(const Vector3D& vec3)
 {
 }
 // Destructor
-Normal::~Normal()
+inline Normal::~Normal()
 {
 }
 
@@ -150,7 +151,7 @@ float operator* (const Point3D& p3d, const Normal& n)
 // multiplication by a matrix on the left
 Normal operator* (const Matrix& mat, const Normal& n)
 {
-	return (	Normal(	mat.m[0][0] * n.x + mat.m[1][0] * n.y + mat.m[2][0] * n.z,
-						mat.m[0][1] * n.x + mat.m[1][1] * n.y + mat.m[2][1] * n.z,
-						mat.m[0][2] * n.x + mat.m[1][2] * n.y + mat.m[2][2] * n.z));
+	return (Normal(mat.m[0][0] * n.x + mat.m[1][0] * n.y + mat.m[2][0] * n.z,
+		mat.m[0][1] * n.x + mat.m[1][1] * n.y + mat.m[2][1] * n.z,
+		mat.m[0][2] * n.x + mat.m[1][2] * n.y + mat.m[2][2] * n.z));
 }

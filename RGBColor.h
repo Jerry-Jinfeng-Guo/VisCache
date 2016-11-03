@@ -36,8 +36,8 @@ public:
 	// Returns if two RGBColor are equal
 	bool operator== (const RGBColor& color) const;
 	// If black/white
-	inline bool is_black(){ return this->r == 0.0f && this->g == 0.0f && this->b == 0.0f; };
-	inline bool is_white(){ return this->r == 1.0f && this->g == 1.0f && this->b == 1.0f; };
+	inline bool is_black(){ return this->r <= 0.0f || this->g <= 0.0f || this->b <= 0.0f; };
+	inline bool is_white(){ return this->r >= 1.0f || this->g >= 1.0f || this->b >= 1.0f; };
 	// Max/min color value
 	inline float max_channel(){ return this->r > this->g && this->r > this->b ? this->r : this->g > this->b ? this->g : this->b; }
 	//inline float min_channel(){}
