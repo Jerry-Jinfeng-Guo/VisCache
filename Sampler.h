@@ -23,6 +23,8 @@ public:
 	RGBColor sample(Ray& ray_process, const int depth);
 	// The method to shade current HitPoint, called in sample
 	void shade(Ray& ray_process, HitPoint& hitPoint, RGBColor& color, const int depth);
+	// Visibility query, use the cache or directly use the BVH, starting from certain depth
+	bool isVisible(Ray& shadowRay, Normal& norml, const int depth);
 	// Visibility query, use the cache or directly use the BVH
 	bool isVisible(Ray& shadowRay, Normal& norml);
 
@@ -30,14 +32,14 @@ public:
 };
 
 // Non-member function
-// Multiple Importance Sampling!
+// A Many Light Rendering Algorithm
 // The function to randomly select a light index with uniform distribution. Probablity of being chosen equals their importance
 int random_light_index(std::vector<float>& list);
 // The function to build a importance list for lights
 void build_importance_list(const std::vector<GeoPrimitive*>&, const HitPoint&, std::vector<float>&);
 
 // Inline non-member functions
-// Balanced heuristic and power heuristic, based on Veach's MIS
+// Balanced heuristic and power heuristic, based on Veach's MIS, from PBRT
 inline float BalanceHeuristic(int nf, float fPdf, int ng, float gPdf)
 {
 	return (nf * fPdf) / (nf * fPdf + ng * gPdf);

@@ -105,7 +105,11 @@ void Sampler::shade(Ray& ray_process, HitPoint& hitPoint, RGBColor& color, const
 			sampleRay_light.t = sqrtf(distance2) - 0.0005f;
 
 			// Visibility test
+#ifdef FIRST_BOUNCE
+			bool visible = isVisible(sampleRay_light, hitPoint.normal, depth);
+#else
 			bool visible = isVisible(sampleRay_light, hitPoint.normal);
+#endif
 
 			//pdf_light = distance2 / (area * cosine_light);
 			pdf_light = distance2 / area; float inv_pdf_light = area / distance2;
@@ -156,6 +160,20 @@ void Sampler::shade(Ray& ray_process, HitPoint& hitPoint, RGBColor& color, const
 	// The MC Rendering Equation: 'e + albedo * BRDF * cosine * color / pdf', wherein 'albedo * BRDF * color / pdf' is handled in NEE & MIS 
 	color = emitted + E * cosine;
 }
+
+// Visibility query, use the cache or directly use the BVH, starting from certain depth
+bool Sampler::isVisible(Ray& shadowRay, Normal& norml, const int depth)
+{
+	// If deeper than 0, i.e. from the second bounce onwards, use the visbility cache
+	if (depth > 0)
+	{
+		return isVisible(shadowRay, norml);
+	}
+
+	// If at depth 0, i.e. first bounce, do not use visbility cache, as it introduces errors
+	return !this->scene->bvhTree.hit(shadowRay);
+}
+
 // Visibility query, use the cache or directly use the BVH
 bool Sampler::isVisible(Ray& shadowRay, Normal& norml)
 {

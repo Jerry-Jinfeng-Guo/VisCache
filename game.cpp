@@ -176,8 +176,10 @@ void Game::Tick( float _DT )
 			screen->Plot(x, y, color.out());				//		450ms	120ms
 		}
 	}
+	#ifdef SHOWI_NFO
 	sprintf(info, "single ray mode");
 	screen->Print(info, (SCRWIDTH / 2) - 50, 20, 0xffff00);
+	#endif
 
 #else
 	/// Loop through all packets, hit the Scene with Packets, Ray Packet Mode
@@ -225,10 +227,12 @@ void Game::Tick( float _DT )
 			screen->Plot(x, y, (rayPacket.colors[i].out()));			//			11ms
 		}
 	}
+	#ifdef SHOWI_NFO
 	sprintf(info, "ray packet mode");
 	screen->Print(info, (SCRWIDTH / 2) - 50, 10, 0xffff00);
 	sprintf(info, " %d Rays/Packet", RAY_PACKET_SIZE);
 	screen->Print(info, 20, 40, 0x00ff00);
+	#endif
 #endif
 
 #else						// <<<------- Switch between ray tracing and path tracing -----<<-
@@ -246,18 +250,21 @@ void Game::Tick( float _DT )
 #pragma omp parallel for
 			for (int x = 0; x < scene->get_cam()->get_w(); x++)
 			{
-				Ray ray = scene->get_cam()->ray(x, y, spp, pass);
-				Sampler sampler = Sampler(scene);
-				RGBColor color = sampler.sample(ray, 0);
-				color.correct_gamma();
-				buffer->add_to_buffer(color, x, y);
+				if (buffer->get_count() < SPP)
+				{
+					Ray ray = scene->get_cam()->ray(x, y, spp, pass);
+					Sampler sampler = Sampler(scene);
+					RGBColor color = sampler.sample(ray, 0);
+					color.correct_gamma();
+					buffer->add_to_buffer(color, x, y);
+				}
 				screen->Plot(x, y, (buffer->get_color(x, y).out()));
 			}
 		}
 	}
-
+	
+#ifdef IPI
 	// Image Processing
-#if 1
 	if (ipindex == 1)
 	{
 		ipbuffer->reset_buffer();
@@ -314,20 +321,27 @@ void Game::Tick( float _DT )
 			screen->Plot(x, y, (ipbuffer->get_color(x, y).out()));
 	}
 #endif
-#ifdef VIS_CACHE
+
+	sprintf(info, " %d SPP", buffer->get_count());
+	screen->Print(info, 20, 40, 0x00ff00);
+
+#ifdef SHOWI_NFO
+	#ifdef VIS_CACHE
 	sprintf(info, "Path Tracing with VisCache");
 	screen->Print(info, (SCRWIDTH / 2) - 80, 10, 0xffff00);
 	sprintf(info, " %d SPP", buffer->get_count());
 	screen->Print(info, 20, 40, 0x00ff00);
-#else
+	#else
 	sprintf(info, "Path Tracing");
 	screen->Print(info, (SCRWIDTH / 2) - 50, 10, 0xffff00);
 	sprintf(info, " %d SPP", buffer->get_count());
 	screen->Print(info, 20, 40, 0x00ff00);
-#endif
-	
-#endif
+	#endif
+#endif	// End of show info
 
+#endif	// End of Ray tracing / path tracing toggle
+
+#ifdef SHOWI_NFO
 	/// Time counter and screen display
 	clock_t finishTime = clock();
 	float duration =  float(finishTime - startTime);
@@ -337,7 +351,7 @@ void Game::Tick( float _DT )
 	screen->Print(info, 20, 20, 0x00ff00);
 	sprintf(info, " %.2f FPS", fps);
 	screen->Print(info, 20, 30, 0x00ff00);
-	/*
+	
 	sprintf(info, " %d object(s)", scene->object_count());
 	screen->Print(info, 20, SCRHEIGHT - 40, 0xff0000);
 	sprintf(info, " %d BVH node(s)", scene->BVH_node_count());
@@ -345,7 +359,8 @@ void Game::Tick( float _DT )
 	sprintf(info, " %d light(s)", scene->light_count());
 	screen->Print(info, 20, SCRHEIGHT - 20, 0xff0000);
 	//getchar();	// Save the laptop from burning...
-	*/
+	
+#endif	// End of show info
 }
 
 // -----------------------------------------------------------
@@ -360,7 +375,7 @@ void Game::BuildScene()
 	cam->set_aperture(0.5f);
 	buffer = new colorBuffer();
 	scene->set_cam(cam);
-	/// Load image using FreeImage, and set it to the Scene::EnvBall as a SkySphere
+	/// Load image using FreeImage, and set it to the Scene::EnvBall as a SkySphere/SkyDome
 	EnvBall* sky = new EnvBall("./img/sky.png");
 	scene->set_env_ball(sky);
 
@@ -383,7 +398,7 @@ void Game::BuildScene()
 	scene->add_texture(solid_grn);			scene->add_texture(earth_map);
 
 	/// Initialize materials: lambert, blinn, etc. All materials need to have a texture!
-	/// Material test
+	// Material tests
 	Lambert* lambert_test = new Lambert(RGBColor(0.5f));		lambert_test->set_texture(solid_red);		scene->add_material(lambert_test);
 	Lambert* lambert_test_r = new Lambert(RGBColor(0.5f));		lambert_test_r->set_texture(solid_red);		scene->add_material(lambert_test_r);
 	Lambert* lambert_test_grd = new Lambert(RGBColor(0.5f));	lambert_test_grd->set_texture(checkerBoard);	scene->add_material(lambert_test_grd);
@@ -403,32 +418,32 @@ void Game::BuildScene()
 	Microfacet * microfacet_test03 = new Microfacet(RGBColor(0.5f), 1000.0f, 0.009f);		microfacet_test03->set_texture(solid_wit);	scene->add_material(microfacet_test03);
 
 	/// Create objects, assign materials, push primitives into scene
-	/// Three balls, one specular, one mirror, one glass
+	// Three balls, one specular, one mirror, one glass
 	Sphere* ball01 = new Sphere(Point3D( 0.0f,   0.0f,  0.0f), 10.0f, RGBColor(0.5f));
 	ball01->set_material(mirror_test);	// lambert_test	microfacet_test
 	Sphere* ball02 = new Sphere(Point3D( 0.0f, -17.0f, 20.0f),  3.0f, RGBColor(0.5f));
 	ball02->set_material(phong_test);
 	Sphere* ball03 = new Sphere(Point3D(-30.0f,  8.0f, 0.0f),	6.0f, RGBColor(0.5f));
 	ball03->set_material(phong_test);
-	
-	/// Two new balls, one as a lambert basement, the other as a shiny thingy
+	// Two new balls, one as a lambert basement, the other as a shiny thingy
 	Sphere* ball04 = new Sphere(Point3D(-20.0f, -25.0f, 10.0f),  7.0f, RGBColor(0.5f));
 	ball04->set_material(lambert_test_grd);
 	Sphere* ball05 = new Sphere(Point3D(-20.0f, -13.0f, 10.0f),  5.0f, RGBColor(0.5f));
 	ball05->set_material(glass_test);
-	
-	/// The ground and the back wall, lambert is too bright for the backwall, thus use a new 'wall' material*
+	// The ground and the back wall, lambert is too bright for the backwall, thus use a new 'wall' material*
 	Rect* ground = new Rect(Point3D(-50.0f, -20.01f, -30.0f), Point3D(-50.0f, -20.0f, 30.0f), Point3D(50.0f, -20.01f, -30.0f));
 	ground->set_material(lambert_test_grd);
-
-
 	
 	// The light(s)!
 #ifdef BIG_LIGHT
+	#ifdef BIGGER_LIGHT
+	Rect* areaLight01 = new Rect(Point3D(45.0f, 40.0f, 15.0f), Point3D( 0.0f, 40.1f, 15.0f), Point3D(45.0f, 39.9f, 0.0f));
+	#else	// Else of bigger light
 	Rect* areaLight01 = new Rect(Point3D(30.0f, 40.0f, 15.0f), Point3D( 0.0f, 40.1f, 15.0f), Point3D(30.0f, 39.9f, 0.0f));
+	#endif	// End of bigger light
 #else
 	Rect* areaLight01 = new Rect(Point3D(50.0f, 40.0f, 15.0f), Point3D(30.0f, 40.1f, 15.0f), Point3D(50.0f, 39.9f, 5.0f));
-#endif
+#endif		// End of big light
 	areaLight01->set_material(light_W_test);	// 
 	scene->add_geo(areaLight01);
 	//Rect* areaLight02 = new Rect(Point3D(-30.0f, 40.0f, 15.0f), Point3D(-50.0f, 39.9f, 15.0f), Point3D(-30.0f, 40.1f, 5.0f));
@@ -438,12 +453,13 @@ void Game::BuildScene()
 	//areaLight03->set_material(light_W_test);	// 
 	//scene->add_geo(areaLight03);
 
-#if 1
+#ifdef LOAD_OBJ
 	//// Load *.obj files
 	scene->load_obj("./Obj/bunny.obj", microfacet_test03, Point3D(21.5f, -20.0f, 10.0f));
 	scene->load_obj("./Obj/helix_high.obj", microfacet_test03, Point3D(0.0f, -20.0f, 3.0f));
 	scene->load_obj("./Obj/bracelet.obj", microfacet_test02, Point3D(-1.5f, -20.0f, 15.5f));
-#endif
+#endif	// End of load_obj
+
 #ifdef INDOOR
 	// Add left, right, back, front and top of the indoor box
 	scene->load_obj("./Obj/indoor.obj", lambert_test, Point3D(0.0f, 0.0f, 0.0f));
@@ -455,18 +471,17 @@ void Game::BuildScene()
 	//scene->add_geo(ball03);
 	scene->add_geo(ball04);
 	scene->add_geo(ball05);
-#endif
-
-#if 1
 	scene->add_geo(ground);
 	//scene->add_geo(sideWall);
 	
 #endif
 
+#ifdef IPI
 	// Initialize Image Processing Parts
 	ipindex = 0;
 	imageprocessing = new ImageProcessing();
 	ipbuffer = new colorBuffer();
+#endif	// End of IPI
 
 	// Initialize Scene's BVH acceleration structure
 	scene->buildBVH();
@@ -480,7 +495,7 @@ void Game::BuildScene()
 		<< "Using:			" << float(scene->get_cache_count() * sizeof(VisCacheData)) / (1024.f*1024.f)
 		 << " MB space\n"
 		 << "Taking:			" << duration << " ms.\n" << std::endl;
-#endif
+#endif	// End of Vis Cache
 
 	/// Print scene info
 	cout << "Total: " << scene->object_count() << " object(s), "
@@ -504,6 +519,7 @@ void Game::BuildScene()
 	cout << "	L: Focus closer (>0.0f)" << endl;
 	cout << "	N: Aperture up (<5.0f)" << endl;
 	cout << "	M: Aperture down (>0.0f)" << endl;
+	#ifdef IPI
 	cout << "	#1: Median Filter" << endl;
 	cout << "	#2: Painting Style" << endl;
 	cout << "	#3: Color Disperse" << endl;
@@ -512,6 +528,7 @@ void Game::BuildScene()
 	cout << "	#6: Lomo" << endl;
 	cout << "	#9: Original Image" << endl;
 	cout << "	#0: Save Image" << endl;
+	#endif	//End of IPI
 	cout << "	Any other Key: restart render" << endl;
 }
 
