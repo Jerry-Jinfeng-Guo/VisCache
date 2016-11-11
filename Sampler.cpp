@@ -63,6 +63,7 @@ void Sampler::shade(Ray& ray_process, HitPoint& hitPoint, RGBColor& color, const
 
 	// First scatter the incoming ray
 	bool scattered = hitPoint.material->scatter(ray_process, hitPoint, sampleRay_scater, albedo, pdf_scatter);
+	scene->total_ray_count++;
 	// Total absorption, nothing reflected, thus only return material emission + color. Only for Matte.
 	if ( !scattered )
 	{
@@ -169,7 +170,7 @@ bool Sampler::isVisible(Ray& shadowRay, Normal& norml, const int depth)
 	{
 		return isVisible(shadowRay, norml);
 	}
-
+	scene->shadow_ray_count++;
 	// If at depth 0, i.e. first bounce, do not use visbility cache, as it introduces errors
 	return !this->scene->bvhTree.hit(shadowRay);
 }
@@ -223,6 +224,7 @@ bool Sampler::isVisible(Ray& shadowRay, Normal& norml)
 	}
 
 #else
+	scene->shadow_ray_count ++;
 	return !this->scene->bvhTree.hit(shadowRay);
 #endif
 }

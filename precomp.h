@@ -34,11 +34,11 @@
 #define	SPP					256							// 16*16
 #define drand48()			(float)rand()/RAND_MAX
 #define NEE												// Next event estimation
-//#define VIS_CACHE										// The Visibility Caching switch
+#define VIS_CACHE										// The Visibility Caching switch
 #define BIG_LIGHT
 //#define BIGGER_LIGHT
 #define INDOOR
-#define FIRST_BOUNCE									// Do not use the vis cache at first bounce
+//#define FIRST_BOUNCE									// Do not use the vis cache at first bounce
 #define USE_CACHE_SINCE		0							// Start using the cache since which depth of rays
 #define	NUM_VIS_CACHE		4096						// 2k -> ~32mb		4k	-> ~64 mb	10k		-> ~160 mb
 #define	NUM_CACHE_CAND		1024000*2					// 200k -
@@ -52,7 +52,7 @@
 
 #if 0
 #define VIS_GRID_SIZE		64							// Maximum grid size: 64x64x64
-#elif 1
+#elif 0
 #define VIS_GRID_SIZE		128							// Maximum grid size: 128x128x128
 #else
 #define VIS_GRID_SIZE		256							// Maximum grid size: 256x256x256

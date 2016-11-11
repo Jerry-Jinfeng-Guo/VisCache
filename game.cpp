@@ -147,6 +147,8 @@ void Game::Init()
 // -----------------------------------------------------------
 void Game::Tick( float _DT )
 {
+	scene->total_ray_count = 0;
+	scene->shadow_ray_count = 0;
 	/// Time counter
 	clock_t startTime = clock();
 	screen->Clear(0);
@@ -253,6 +255,7 @@ void Game::Tick( float _DT )
 				if (buffer->get_count() < SPP)
 				{
 					Ray ray = scene->get_cam()->ray(x, y, spp, pass);
+					scene->total_ray_count++;
 					Sampler sampler = Sampler(scene);
 					RGBColor color = sampler.sample(ray, 0);
 					color.correct_gamma();
@@ -324,7 +327,9 @@ void Game::Tick( float _DT )
 
 	sprintf(info, " %d SPP", buffer->get_count());
 	screen->Print(info, 20, 40, 0x00ff00);
-
+	//cout << "Total ray count: " << scene->total_ray_count << endl;
+	//cout << "Shadow ray count: " << scene->shadow_ray_count << endl;
+	
 #ifdef SHOWI_NFO
 	#ifdef VIS_CACHE
 	sprintf(info, "Path Tracing with VisCache");
@@ -530,6 +535,9 @@ void Game::BuildScene()
 	cout << "	#0: Save Image" << endl;
 	#endif	//End of IPI
 	cout << "	Any other Key: restart render" << endl;
+
+	scene->total_ray_count = 0;
+	scene->shadow_ray_count = 0;
 }
 
 // The Morton Encoder, given pixel coordinate (x, y), return index in array

@@ -81,6 +81,9 @@ public:
 	friend class Sampler;
 	friend class Material;
 
+	int total_ray_count;
+	int shadow_ray_count;
+
 protected:
 	// Containers for all geometries, lignts and Camera pointers
 	std::vector<GeoPrimitive*> objects;
