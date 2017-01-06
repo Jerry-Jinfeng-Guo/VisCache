@@ -1,5 +1,5 @@
 # VisCache
-Unidirectional Path Tracer with Visibility Caching
+
 Hi, this is a (not too) simple unidirectional path tracer with several features. The path tracer was originally developed for the Advanced Graphics course by Jacco Bikker at Utrecht University. Featuring SAH-BVH, NEE, MIS and several BRDF including microfacet model. Pretty much everything was built from scratch. Of course with references to many existing open source solutions, such as PRBT.
 
 The visibility caching is a new feature I finished in October, 2016, for a small research project. The idea is simple, to approximate the visibility term in the rendering equation. Direct illumination will, of course, not benifit from this scheme since it introduces obvious artifact. Indirect illumination, according to many research, varies smoothly and does not have to be physically correct to please human eyes.
